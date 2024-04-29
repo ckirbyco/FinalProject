@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Main Page
+{% endblock %}
+
+{% block content %}
+    <h1>Main Page</h1>
+    <!-- Add your main page content here -->
+    <div class="dropdown">
+        <button class="dropbtn">Go to...</button>
+        <div class="dropdown-content">
+            <a href="/admin">Admin</a>
+            <a href="/reservations">Reservations</a>
+        </div>
+    </div>
+{% endblock %}
