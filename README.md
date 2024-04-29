@@ -1,5 +1,5 @@
-Project: Trip Reservation System
-Project Objectives
+<h1>Project: Trip Reservation System</h1>
+<h2>Project Objectives</h2>
 To further gain experience and develop skill working with Docker and Flask, or another language/platform chosen by the scrum team.
 To further develop team chemistry and communication skill.
 To further develop skill using agile project management and Jira
