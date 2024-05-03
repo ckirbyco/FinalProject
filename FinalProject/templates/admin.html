@@ -6,7 +6,23 @@
 
 {% block content %}
     <h1>Admin Page</h1>
-
-
-
+    
+    {% if authenticated %}
+        <h2>Welcome, {{ username }}!</h2>
+ 
+        <p>Logged in as user. Now need to display seating chart.</p>
+        
+    {% else %}
+        <h2>Admin Login</h2>
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        <form action="/admin" method="post">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password"><br><br>
+            <input type="submit" value="Login">
+        </form>
+    {% endif %}
 {% endblock %}
