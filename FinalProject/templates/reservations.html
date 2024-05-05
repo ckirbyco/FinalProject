@@ -1,11 +1,74 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Reservations Page
+Reservations Page
 {% endblock %}
 
 {% block content %}
-    <h1>Reservations Page</h1>
+<h1>Make a Reservation</h1>
+
+<!-- Display flash messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<!-- Seating Chart Display -->
+<h2>Seating Chart</h2>
+<div style="text-align: center; margin-bottom: 20px;">
+    <table style="border-collapse: collapse; border: 1px solid black; margin: auto;">
+        {% for row in paired_seating_chart %}
+            <tr>
+                {% for seat, cost in row %}
+                    <td style="padding: 5px;" class="{{ 'seat-taken' if seat == 'X' else 'seat-open' }}">
+                        {{ seat }} (${{ cost }})
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<!-- Button to refresh seating chart -->
+<button type="button" onclick="location.reload()">Refresh Seating Chart</button>
+
+
+{% if confirmed %}
+    <h2>Reservation Confirmed</h2>
+    <p>Thank you for making a reservation. Your reservation details are as follows:</p>
+    <ul>
+        <li>Passenger Name: {{ passenger_name }}</li>
+        <li>Row: {{ row }}</li>
+        <li>Column: {{ column }}</li>
+        <li>Reservation Code: {{ e_ticket_number }}</li>
+    </ul>
+    <p><a href="/">Return to Home</a></p>
+{% else %}
+    <form id="reservation-form" action="/reservations" method="post">
+        <label for="passenger_name">Passenger Name:</label>
+        <input type="text" id="passenger_name" name="passenger_name" required><br><br>
+
+        <label for="row">Row:</label>
+        <select id="row" name="row" required>
+            {% for row_num in rows %}
+            <option value="{{ row_num }}">{{ row_num }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="column">Column:</label>
+        <select id="column" name="column" required>
+            {% for column_num in columns %}
+            <option value="{{ column_num }}">{{ column_num }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <button type="submit" onclick="location.reload()">Reserve</button>
+
+    </form>
+{% endif %}
 
 
 
