@@ -20,20 +20,29 @@ def index():
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-
-    #Verifying user input and logging in as admin
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        
-        if username in users:
-            if users[username] == password:
-                return render_template('admin.html', authenticated=True, username=username)
 
-        error = "Invalid username or password"
-        return render_template('admin.html', error=error)
-    
-    return render_template('admin.html')
+        # Connect to the database and check if the user exists
+        conn = sqlite3.connect('reservations.db')
+        c = conn.cursor()
+        c.execute("SELECT * FROM admins WHERE username = ? AND password = ?", (username, password))
+        user = c.fetchone()
+        conn.close()
+
+        if user:
+            session['authenticated'] = True
+            session['username'] = username
+            seating_chart = get_seating_chart()  # Fetch updated seating chart
+            cost_matrix = get_cost_matrix()  # Fetch cost matrix
+            total_sales = calculate_total_sales(seating_chart, cost_matrix)  # Calculate total sales
+            return render_template('admin.html', authenticated=True, username=username, seating_chart=seating_chart, total_sales=total_sales)
+
+        flash("Invalid username or password", "error")
+
+    # If not logged in or login failed, render the login page
+    return render_template('admin.html', authenticated=False)
 
 @app.route('/reservations')
 def reservations():
