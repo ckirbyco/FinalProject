@@ -77,9 +77,6 @@ def calculate_total_sales(seating_chart, cost_matrix):
                 total_sales += cost_matrix[row_idx][col_idx]  # Add the corresponding price to total sales
     return total_sales
 
-# Make sure to import the necessary functions from reservation.py
-from reservation import generate_eTicket_number, reserve_seat
-
 @app.route('/reservations', methods=['GET', 'POST'])
 def reservations():
     # Prepare the seating chart, reserved seats, and cost matrix upfront
@@ -104,7 +101,6 @@ def reservations():
             flash("This seat is already reserved. Please select another seat.", "error")
             return render_template('reservation_form.html', confirmed=False, paired_seating_chart=paired_seating_chart, rows=rows, columns=columns)
 
-        # Call the generate_eTicket_number function from reservation.py
         e_ticket_number = generate_eTicket_number(passenger_name)
         
         try:
